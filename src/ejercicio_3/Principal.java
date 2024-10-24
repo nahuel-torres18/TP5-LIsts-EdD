@@ -56,7 +56,7 @@ public class Principal {
 					if (eliminarDeudaPorNombreAcredor(listaDeudad, input)) {
 						System.out.println("Se elimino la deuda correctamente");
 					} else {
-						System.out.println("La deuda no existe o se ingreso mal el codigo");
+						System.out.println("La deuda no existe o se ingreso mal el nombre del acredor");
 					}
 					break;
 				case 4:

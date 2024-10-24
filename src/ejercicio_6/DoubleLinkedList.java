@@ -1,27 +1,28 @@
-package ejercicio_3;
+package ejercicio_6;
 
 import java.util.Iterator;
 
 public class DoubleLinkedList<ELEMENT> implements ILinkedList<ELEMENT> {
 	
 	protected class Node<ELEMENT> {
+		
 		protected ELEMENT item;
 		protected Node<ELEMENT> next;
 		protected Node<ELEMENT> prev;
 		
-		public Node() {
+		protected Node() {
 			this(null, null, null);
 		}
 		
-		public Node(ELEMENT item) {
+		protected Node(ELEMENT item) {
 			this(item, null, null);
 		}
 		
-		public Node(ELEMENT item, Node<ELEMENT> next) {
+		protected Node(ELEMENT item, Node<ELEMENT> next) {
 			this(item, next, null);
 		}
 		
-		public Node(ELEMENT item, Node<ELEMENT> next, Node<ELEMENT> prev) {
+		protected Node(ELEMENT item, Node<ELEMENT> next, Node<ELEMENT> prev) {
 			this.item = item;
 			this.next = next;
 			this.prev = prev;
@@ -32,6 +33,7 @@ public class DoubleLinkedList<ELEMENT> implements ILinkedList<ELEMENT> {
 			return this.item.toString();
 		}
 	}
+	
 	private Node<ELEMENT> head;
 	private Node<ELEMENT> tail;
 	private int count;
@@ -58,7 +60,7 @@ public class DoubleLinkedList<ELEMENT> implements ILinkedList<ELEMENT> {
 	}
 	
 	public void addLast(ELEMENT item) {
-		Node<ELEMENT> temp = new Node<ELEMENT>(item, null, this.tail);
+		Node<ELEMENT> temp = new Node<>(item, null, this.tail);
 		if (this.size() == 0) {
 			this.head = temp;
 		} else {
@@ -70,7 +72,7 @@ public class DoubleLinkedList<ELEMENT> implements ILinkedList<ELEMENT> {
 	
 	public ELEMENT removeFirst() {
 		if (this.size() == 0) {
-			throw new RuntimeException("LISTA VACIA");
+			throw new RuntimeException("Lista vacia");
 		}
 		ELEMENT item = this.head.item;
 		this.head = this.head.next;
@@ -85,7 +87,7 @@ public class DoubleLinkedList<ELEMENT> implements ILinkedList<ELEMENT> {
 	
 	public ELEMENT removeLast() {
 		if (this.size() == 0) {
-			throw new RuntimeException("LISTA VACIA");
+			throw new RuntimeException("Lista vacia");
 		}
 		ELEMENT item = this.tail.item;
 		if (this.head.next == null) {
@@ -98,63 +100,29 @@ public class DoubleLinkedList<ELEMENT> implements ILinkedList<ELEMENT> {
 		return item;
 	}
 	
-	public boolean eliminarPorCodigo(int codigo) {
-		if (this.head == null) {
-			return false;
-		}
-		if (((Deuda)this.head.item).getCodigo() == codigo) {
-			removeFirst();
-			return true;
-		}
-		Node<ELEMENT> temp = this.head;
-		while (temp != null && temp.item instanceof Deuda) {
-			Deuda deuda = (Deuda)temp.item;
-			if (deuda.getCodigo() == codigo) {
-				if (temp == this.tail) {
-					removeLast();
-					return true;
-				} else {
-					temp.prev.next = temp.next;
-					temp.next.prev = temp.prev;
-					return true;
-				}
-			}
-			temp = temp.next;
-			
-		}
-		return false;
-	}
-	
-	public boolean eliminarPorNombreAcredor(String nombreAcredor) {
-		if (this.head == null) {
-			return false;
-		}
-		if (((Deuda)this.head.item).getNombreAcredor().equals(nombreAcredor)) {
-			removeFirst();
-			return true;
-		}
-		Node<ELEMENT> temp = this.head;
-		while (temp != null && temp.item instanceof Deuda) {
-			Deuda deuda = (Deuda)temp.item;
-			if (deuda.getNombreAcredor().equals(nombreAcredor)) {
-				if (temp == this.tail) {
-					removeLast();
-					return true;
-				} else {
-					temp.prev.next = temp.next;
-					temp.next.prev = temp.prev;
-					return true;
-				}
-			}
-			temp = temp.next;
-			
-		}
-		return false;
+	public void eliminarNumeroRepetido() {
+	    Node<ELEMENT> temp = this.head;
+	    while (temp != null) {
+	        Node<ELEMENT> current = temp.next;
+	        Node<ELEMENT> aux = temp; 	        
+	        while (current != null) {
+	            if (temp.item == current.item) {
+	                aux.next = current.next; 
+	                if (current.next != null) {
+	                    current.next.prev = aux;
+	                }
+	            } else {
+	                aux = current;
+	            }
+	            current = current.next;
+	        }
+	        temp = temp.next;
+	    }
 	}
 	
 	@Override
     public Iterator<ELEMENT> iterator() {
-        return new DoubleLinkedListIterator(this.head); //Esta retornando el objeto DoubleLinkedListIterartor que es un constructor.
+        return new DoubleLinkedListIterator(this.head);
     }
  
     public class DoubleLinkedListIterator implements Iterator<ELEMENT> {
